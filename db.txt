@@ -1,0 +1,60 @@
+CREATE DATABASE JobRecruitmentDB;
+USE JobRecruitmentDB;
+
+-- Users Table (Both Job Seekers and Employers)
+CREATE TABLE Users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    full_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    user_type ENUM('job_seeker', 'employer') NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Employers Table (For Companies)
+CREATE TABLE Employers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    company_name VARCHAR(255) NOT NULL,
+    company_description TEXT,
+    company_website VARCHAR(255),
+    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE
+);
+
+-- Jobs Table (Job Postings)
+CREATE TABLE Jobs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    employer_id INT NOT NULL,
+    job_title VARCHAR(255) NOT NULL,
+    job_description TEXT NOT NULL,
+    required_skills TEXT NOT NULL,
+    location VARCHAR(255),
+    job_type ENUM('full_time', 'part_time', 'remote', 'contract') NOT NULL,
+    salary_range VARCHAR(50),
+    posted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (employer_id) REFERENCES Employers(id) ON DELETE CASCADE
+);
+
+-- Resumes Table (Uploaded Resumes by Job Seekers)
+CREATE TABLE Resumes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    resume_file VARCHAR(255) NOT NULL, -- Path to uploaded file
+    skills TEXT NOT NULL,
+    experience TEXT NOT NULL,
+    education TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE
+);
+
+-- Applications Table (Tracks Job Applications)
+CREATE TABLE Applications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    job_id INT NOT NULL,
+    user_id INT NOT NULL,
+    resume_id INT NOT NULL,
+    application_status ENUM('pending', 'reviewed', 'accepted', 'rejected') DEFAULT 'pending',
+    applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (job_id) REFERENCES Jobs(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE,
+    FOREIGN KEY (resume_id) REFERENCES Resumes(id) ON DELETE CASCADE
+);
