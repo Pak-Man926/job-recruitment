@@ -6,8 +6,9 @@ require('dotenv').config();
 const app = express();
 
 // Middleware
-app.use(cors());
-app.use(bodyParser.json());
+app.use(cors()); // Enable CORS (optional)
+app.use(express.json()); // ✅ Parse JSON requests
+app.use(bodyParser.urlencoded({ extended: true })); // ✅ Parse URL-encoded requests
 
 // Routes
 const userRoutes = require('./src/routes/userRoutes');
