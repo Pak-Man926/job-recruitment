@@ -1,5 +1,5 @@
 const express = require("express");
-const { applyForJob, getAllApplications, getUserApplications, updateApplicationStatus } = require("../controllers/applicationsController");
+const { applyForJob, getAllApplications, getUserApplications, updateApplicationStatus, getJobApplications } = require("../controllers/applicationsController");
 const authMiddleware = require("../middleware/authMiddleware");
 const router = express.Router();
 
@@ -14,5 +14,7 @@ router.get("/my-applications", authMiddleware, getUserApplications);
 
 // Update application status (Admin / Employer)
 router.put("/:id/status", authMiddleware, updateApplicationStatus);
+
+router.get("/applications", authMiddleware, getJobApplications);
 
 module.exports = router;

@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // ✅ Parse URL-encoded req
 // Routes
 const userRoutes = require('./src/routes/userRoutes');
 const jobRoutes = require('./src/routes/jobRoutes');
-const jobApplicationRoutes = require('./src/routes/jobApplicationRoutes');
+const jobApplicationRoutes = require('./src/routes/jobApplicationRoutes.js');
 
 app.use('/api/users', userRoutes);
 app.use('/api/jobs', jobRoutes);
