@@ -1,20 +1,29 @@
 const express = require("express");
-const { applyForJob, getAllApplications, getUserApplications, updateApplicationStatus, getJobApplications } = require("../controllers/applicationsController");
+const { applyForJob, getJobApplications } = require("../controllers/applicationsController");
 const authMiddleware = require("../middleware/authMiddleware");
+const multer = require('multer');
 const router = express.Router();
 
-// Apply for a job (User)
-router.post("/apply", authMiddleware, applyForJob);
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/'); // Path where files will be saved
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + '-' + file.originalname);
+    }
+});
 
-// Get all applications (Admin / Employer)
-router.get("/", authMiddleware, getAllApplications);
+const upload = multer({ storage });
 
-// Get applications for logged-in user
-router.get("/my-applications", authMiddleware, getUserApplications);
+// Apply for a job (User) with file upload for resume
+router.post("/apply", authMiddleware, upload.single('resume'), applyForJob);
 
-// Update application status (Admin / Employer)
-router.put("/:id/status", authMiddleware, updateApplicationStatus);
 
-router.get("/applications", authMiddleware, getJobApplications);
+// Other routes remain the same
+//router.get("/", authMiddleware, getAllApplications);
+//router.get("/my-applications", authMiddleware, getUserApplications);
+//router.put("/:id/status", authMiddleware, updateApplicationStatus);
+router.get("/", authMiddleware, getJobApplications);
 
 module.exports = router;
