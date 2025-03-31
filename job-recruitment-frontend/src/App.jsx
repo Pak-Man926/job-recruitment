@@ -12,6 +12,16 @@ import JobListings from "./components/JobListings";
 
 const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("authToken"));
 
+function ErrorBoundary({ children }) {
+  useEffect(() => {
+    window.addEventListener("error", (event) => {
+      console.error("Global Error:", event.error);
+    });
+  }, []);
+
+  return children;
+}
+
 
 function App() {
   return (
