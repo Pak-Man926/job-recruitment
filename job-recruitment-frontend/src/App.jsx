@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {useState, useEffect} from "react"
 import Home from "./pages/Home";
 import Jobs from "./pages/Jobs";
 import JobDetails from "./pages/JobDetails";
@@ -10,7 +11,9 @@ import Register from "./pages/Register";
 import AuthGuard from "./components/AuthGuard";  // Ensure this exists
 import JobListings from "./components/JobListings";
 
-const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("authToken"));
+
+function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("authToken"));
 
 function ErrorBoundary({ children }) {
   useEffect(() => {
@@ -22,8 +25,6 @@ function ErrorBoundary({ children }) {
   return children;
 }
 
-
-function App() {
   return (
     <Router>
       <Routes>
